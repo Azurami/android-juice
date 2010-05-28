@@ -21,6 +21,9 @@ import javax.swing.JFrame;
  */
 public class MelonJuiceView extends FrameView {
 
+    Server server;
+    Thread threadServer;
+
     public MelonJuiceView(SingleFrameApplication app) {
         super(app);
 
@@ -49,6 +52,7 @@ public class MelonJuiceView extends FrameView {
         statusAnimationLabel.setIcon(idleIcon);
         progressBar.setVisible(false);
 
+       
         // connecting action tasks to status bar via TaskMonitor
         TaskMonitor taskMonitor = new TaskMonitor(getApplication().getContext());
         taskMonitor.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
@@ -103,6 +107,7 @@ public class MelonJuiceView extends FrameView {
         mainPanel = new javax.swing.JPanel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanelStart = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
         jPanelGroups = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jPanel3 = new javax.swing.JPanel();
@@ -124,18 +129,29 @@ public class MelonJuiceView extends FrameView {
 
         jPanelStart.setName("jPanelStart"); // NOI18N
 
+        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(melonjuice.MelonJuiceApp.class).getContext().getActionMap(MelonJuiceView.class, this);
+        jButton1.setAction(actionMap.get("startServer")); // NOI18N
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(melonjuice.MelonJuiceApp.class).getContext().getResourceMap(MelonJuiceView.class);
+        jButton1.setText(resourceMap.getString("jButton1.text")); // NOI18N
+        jButton1.setName("jButton1"); // NOI18N
+
         javax.swing.GroupLayout jPanelStartLayout = new javax.swing.GroupLayout(jPanelStart);
         jPanelStart.setLayout(jPanelStartLayout);
         jPanelStartLayout.setHorizontalGroup(
             jPanelStartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 309, Short.MAX_VALUE)
+            .addGroup(jPanelStartLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton1)
+                .addContainerGap(208, Short.MAX_VALUE))
         );
         jPanelStartLayout.setVerticalGroup(
             jPanelStartLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 278, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelStartLayout.createSequentialGroup()
+                .addContainerGap(244, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addContainerGap())
         );
 
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance(melonjuice.MelonJuiceApp.class).getContext().getResourceMap(MelonJuiceView.class);
         jTabbedPane1.addTab(resourceMap.getString("jPanelStart.TabConstraints.tabTitle"), jPanelStart); // NOI18N
 
         jPanelGroups.setName("jPanelGroups"); // NOI18N
@@ -212,7 +228,6 @@ public class MelonJuiceView extends FrameView {
         fileMenu.setText(resourceMap.getString("fileMenu.text")); // NOI18N
         fileMenu.setName("fileMenu"); // NOI18N
 
-        javax.swing.ActionMap actionMap = org.jdesktop.application.Application.getInstance(melonjuice.MelonJuiceApp.class).getContext().getActionMap(MelonJuiceView.class, this);
         exitMenuItem.setAction(actionMap.get("quit")); // NOI18N
         exitMenuItem.setName("exitMenuItem"); // NOI18N
         fileMenu.add(exitMenuItem);
@@ -261,8 +276,14 @@ public class MelonJuiceView extends FrameView {
         setStatusBar(statusPanel);
     }// </editor-fold>//GEN-END:initComponents
 
+    @Action
+    public void startServer() {
+        new Thread(server = new Server()).start();
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private melonjuice.GroupPanel groupPanel1;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanelGroups;
